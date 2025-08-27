@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Happy Manu Day 🎂💖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fancy: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Inter', 'Poppins', 'Noto Sans', 'Helvetica Neue', 'Arial', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"']
+                    },
+                    boxShadow: {
+                        neon: '0 0 20px rgba(99,102,241,.45), 0 0 60px rgba(236,72,153,.25)',
+                        glass: '0 10px 30px rgba(0,0,0,.35)'
+                    },
+                    dropShadow: {
+                        glow: '0 0 12px rgba(34,211,238,.75)'
+                    },
+                    backgroundImage: {
+                        'mesh': 'radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,.15), transparent 60%), radial-gradient(900px 500px at 90% 20%, rgba(236,72,153,.15), transparent 60%), radial-gradient(700px 400px at 30% 90%, rgba(34,211,238,.12), transparent 60%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+         :root {
+            --glass-bg: rgba(17, 24, 39, .55);
+            --glass-brd: rgba(255, 255, 255, .10);
+            --glass-blur: 14px;
+            --neon-pink: #ec4899;
+            --neon-violet: #6366f1;
+            --neon-cyan: #22d3ee;
+        }
+        
+        .glass {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-brd);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+        }
+        
+        .neon {
+            box-shadow: 0 0 30px rgba(99, 102, 241, .35), inset 0 0 30px rgba(236, 72, 153, .15);
+            border-image: linear-gradient(120deg, var(--neon-violet), var(--neon-pink), var(--neon-cyan)) 1;
+        }
+        
+        .btn-neon:hover {
+            box-shadow: 0 0 20px rgba(236, 72, 153, .55), 0 0 40px rgba(99, 102, 241, .35);
+            transform: translateY(-1px) scale(1.01);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #22d3ee, #a78bfa, #ec4899, #22d3ee);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: hueShift 8s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, .35));
+        }
+        
+        @keyframes hueShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+        
+        .heart {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #ff7ab6, #ff3d96 60%, #ff0a78);
+            transform: rotate(45deg);
+            opacity: .7;
+            filter: drop-shadow(0 0 8px rgba(236, 72, 153, .6));
+            animation: floatUp 8s linear infinite;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: inherit;
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            left: -8px;
+        }
+        
+        .heart:after {
+            top: -8px;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(45deg);
+                opacity: .0;
+            }
+            10% {
+                opacity: .8;
+            }
+            90% {
+                opacity: .9;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+        
+        .typewriter {
+            border-right: 2px solid rgba(255, 255, 255, .8);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: caret 1s step-end infinite;
+        }
+        
+        .finished-typing {
+            white-space: normal;
+            overflow: visible;
+            border-right: none;
+            animation: none;
+        }
+        
+        .slide {
+            transition: opacity .6s ease, transform .6s ease;
+            opacity: 0;
+            transform: scale(.98);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+         ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #6366f1, #ec4899);
+            border-radius: 9999px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, .05);
+        }
+    </style>
+</head>
+
+<body class="dark bg-black text-white font-fancy selection:bg-pink-500/30">
+    <div class="fixed inset-0 -z-10 bg-mesh"></div>
+    <canvas id="starfield" class="fixed inset-0 -z-20"></canvas>
+    <div id="hearts" class="pointer-events-none fixed inset-0 -z-10"></div>
+    <main class="min-h-dvh flex items-center justify-center p-4">
+        <section class="w-full max-w-4xl glass neon rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+            <div class="pointer-events-none absolute -top-20 -left-20 w-72 h-72 bg-fuchsia-500/20 blur-3xl rounded-full"></div>
+            <div class="pointer-events-none absolute -bottom-24 -right-20 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full"></div>
+            <header class="relative z-10 text-center space-y-3">
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight gradient-text">Happy 19th Manu, 💖</h1>
+                <p class="text-white/70">A tiny universe of memories, just for you.</p>
+                <div class="mt-4 flex items-center justify-center gap-2">
+                    <button id="startBtn" class="btn-neon inline-flex items-center gap-2 rounded-full border border-fuchsia-400/50 bg-white/5 px-5 py-2.5 text-sm sm:text-base hover:bg-white/10 transition">
+                        <span id="btnIcon" class="inline-flex">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 lucide lucide-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" />
+                                <path d="M4 12h16" />
+                                <path d="M12 22V7" />
+                                <path d="M7.5 7h9a2.5 2.5 0 1 0-2.5-2.5L12 7l-2-2.5A2.5 2.5 0 1 0 7.5 7Z" />
+                            </svg>
+                        </span>
+                        <span>Open Your Surprise</span>
+                    </button>
+                    <button id="musicBtn" class="inline-flex items-center gap-2 rounded-full border border-cyan-400/50 bg-white/5 px-5 py-2.5 text-sm sm:text-base hover:bg-white/10 transition">
+                        <svg class="w-5 h-5 lucide lucide-music-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M11 22a1 1 0 0 1-1-1V6l10-2v12" />
+                            <circle cx="5" cy="19" r="3" />
+                            <circle cx="19" cy="17" r="3" />
+                        </svg>
+                        <span id="musicLabel">Sound: Off</span>
+                    </button>
+                </div>
+            </header>
+            <div id="surprise" class="relative z-10 mt-8 grid gap-6 sm:grid-cols-2">
+                <div class="glass rounded-2xl p-5 sm:p-6 border border-white/10 shadow-glass">
+                    <h2 class="text-xl font-semibold mb-2">A Note for You ✨</h2>
+                    <p id="typewriter" class="typewriter text-white/90 leading-7"></p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="rounded-full px-3 py-1 text-xs bg-fuchsia-500/20 border border-fuchsia-400/30">#ForeverFav</span>
+                        <span class="rounded-full px-3 py-1 text-xs bg-indigo-500/20 border border-indigo-400/30">#19AndShining</span>
+                        <span class="rounded-full px-3 py-1 text-xs bg-cyan-500/20 border border-cyan-400/30">#YouAreMagic</span>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-3 sm:p-4 border border-white/10 shadow-glass">
+                    <div class="relative overflow-hidden rounded-xl aspect-[16/10]">
+                        <div id="slides" class="w-full h-full"></div>
+                        <button id="prev" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 border border-white/20 p-2 backdrop-blur">
+                            <svg class="w-5 h-5 lucide lucide-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="m15 18-6-6 6-6" />
+                            </svg>
+                        </button>
+                        <button id="next" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 border border-white/20 p-2 backdrop-blur">
+                            <svg class="w-5 h-5 lucide lucide-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="dots" class="mt-3 flex items-center justify-center gap-2"></div>
+                    <p id="caption" class="mt-2 text-center text-sm text-white/70"></p>
+                </div>
+            </div>
+            <footer class="relative z-10 pt-6 text-center text-xs text-white/50">
+                Made with 💜, feelings and wish of togetherness — especially for you.
+            </footer>
+            <audio id="bg-music" loop preload="auto" muted>
+                <source src="Are_Are_Are.wav" type="audio/wav">
+            </audio>
+        </section>
+    </main>
+    <script>
+        const starCanvas = document.getElementById('starfield');
+        const sctx = starCanvas.getContext('2d');
+        let stars = [];
+
+        function resizeStars() {
+            starCanvas.width = innerWidth;
+            starCanvas.height = innerHeight;
+            stars = Array.from({
+                length: 180
+            }, () => ({
+                x: Math.random() * starCanvas.width,
+                y: Math.random() * starCanvas.height,
+                r: Math.random() * 1.4 + 0.2,
+                a: Math.random() * 0.8 + 0.2,
+                v: Math.random() * 0.25 + 0.05
+            }));
+        }
+
+        function drawStars() {
+            sctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+            for (const s of stars) {
+                sctx.beginPath();
+                sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                sctx.fillStyle = `rgba(255,255,255,${s.a})`;
+                sctx.fill();
+                s.y -= s.v;
+                if (s.y < -2) {
+                    s.y = starCanvas.height + 2;
+                    s.x = Math.random() * starCanvas.width;
+                }
+            }
+            requestAnimationFrame(drawStars);
+        }
+        resizeStars();
+        drawStars();
+        addEventListener('resize', resizeStars);
+        const heartsHost = document.getElementById('hearts');
+
+        function spawnHeart() {
+            const h = document.createElement('div');
+            h.className = 'heart';
+            const size = Math.random() * 14 + 10;
+            h.style.width = h.style.height = size + 'px';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.bottom = '-30px';
+            h.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            h.style.animationDelay = (Math.random() * 2) + 's';
+            heartsHost.appendChild(h);
+            setTimeout(() => h.remove(), 12000);
+        }
+        setInterval(spawnHeart, 900);
+        const startBtn = document.getElementById('startBtn');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicLbl = document.getElementById('musicLabel');
+        const typeBox = document.getElementById('typewriter');
+        const message = "Happy 19th Manya Ji! 💫 I hope your day is as bright and wonderful as you are. I wanted to tell you that every moment you're around, you have a way of making everything feel a little more special. I often find myself daydreaming about the adventures we could have and the memories we could make together, from big road trips to the quiet, magical moments that happen every day. Here’s to you and all the happiness you deserve, and I'm hoping that this year brings us closer.✨ Door se hi dekh dekh kar kaise kaam chaalu humesha";
+
+        function typeText(text, speed = 20) {
+            typeBox.textContent = '';
+            typeBox.classList.remove('finished-typing');
+            let i = 0;
+            const tick = () => {
+                if (i <= text.length) {
+                    typeBox.textContent = text.slice(0, i++);
+                    setTimeout(tick, speed);
+                } else {
+                    typeBox.classList.add('finished-typing');
+                }
+            };
+            tick();
+        }
+        const audio = new Audio('Are_Are_Are.wav');
+        audio.loop = true;
+        audio.volume = 0;
+        audio.muted = true;
+        let isPlaying = false;
+        window.addEventListener('load', () => {
+            audio.play().catch(() => {});
+        });
+        startBtn.addEventListener('click', () => {
+            typeText(message, 15);
+            confetti({
+                particleCount: 140,
+                spread: 70,
+                origin: {
+                    y: 0.35
+                }
+            });
+            audio.muted = false;
+            let v = 0;
+            const fade = setInterval(() => {
+                v += 0.05;
+                audio.volume = Math.min(v, 0.9);
+                if (v >= 0.9) clearInterval(fade);
+            }, 120);
+            isPlaying = true;
+            musicLbl.textContent = 'Sound: On';
+        });
+        musicBtn.addEventListener('click', async() => {
+            try {
+                if (audio.paused) {
+                    await audio.play();
+                    audio.muted = false;
+                    audio.volume = 0.85;
+                    isPlaying = true;
+                    musicLbl.textContent = 'Sound: On';
+                } else {
+                    audio.pause();
+                    isPlaying = false;
+                    musicLbl.textContent = 'Sound: Off';
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        });
+        const gallery = [{
+            src: 'image1.png',
+            caption: 'This smile? My permanent wallpaper. 📸'
+        }, {
+            src: 'image2.png',
+            caption: 'Your vibe = sunshine + stardust. ✨'
+        }, {
+            src: 'image3.png',
+            caption: 'More memories, more magic and a wish of togetherness. 💞'
+        }];
+        const slidesEl = document.getElementById('slides');
+        const dotsEl = document.getElementById('dots');
+        const capEl = document.getElementById('caption');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        gallery.forEach((g, i) => {
+            const img = document.createElement('img');
+            img.src = g.src;
+            img.alt = 'memory ' + (i + 1);
+            img.className = 'slide absolute inset-0 w-full h-full object-cover';
+            if (i === 0) img.classList.add('active');
+            slidesEl.appendChild(img);
+            const dot = document.createElement('button');
+            dot.className = 'w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white transition';
+            dot.addEventListener('click', () => go(i, true));
+            dotsEl.appendChild(dot);
+        });
+        let idx = 0;
+        const slides = [...slidesEl.querySelectorAll('.slide')];
+
+        function syncUI() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+            [...dotsEl.children].forEach((d, i) => d.className = 'w-2.5 h-2.5 rounded-full transition ' + (i === idx ? 'bg-white' : 'bg-white/40 hover:bg-white'));
+            capEl.textContent = gallery[idx].caption;
+        }
+
+        function go(n, manual = false) {
+            idx = (n + gallery.length) % gallery.length;
+            syncUI();
+            if (manual) {
+                resetAuto();
+            }
+        }
+
+        function next() {
+            go(idx + 1);
+        }
+
+        function prev() {
+            go(idx - 1);
+        }
+        nextBtn.addEventListener('click', () => go(idx + 1, true));
+        prevBtn.addEventListener('click', () => go(idx - 1, true));
+        syncUI();
+        let autoId = null;
+
+        function startAuto() {
+            autoId = setInterval(next, 3500);
+        }
+
+        function stopAuto() {
+            if (autoId) {
+                clearInterval(autoId);
+                autoId = null;
+            }
+        }
+
+        function resetAuto() {
+            stopAuto();
+            startAuto();
+        }
+        startAuto();
+        slidesEl.parentElement.addEventListener('mouseenter', stopAuto);
+        slidesEl.parentElement.addEventListener('mouseleave', startAuto);
+        window.lucide && lucide.createIcons();
+    </script>
+</body>
+
+</html>
